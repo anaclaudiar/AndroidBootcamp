@@ -4,4 +4,7 @@
     <string name="question1">Is the moon made of cheese?</string>
     <string name="true_string">true</string>
     <string name="false_string">false</string>
+    <string name="correct_answer">YAYYYY!</string>
+    <string name="wrong_answer">Wrong answer.</string>
+    <string name="title_activity_list">ListActivity</string>
 </resources>

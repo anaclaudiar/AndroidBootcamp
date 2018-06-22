@@ -3,18 +3,23 @@ package com.example.vinte.quizzical;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements QuizRepository.QuizCallback{
 
+    public static final String KEY_QUESTION_ID = "key_question_id";
     private boolean userAnswer;
     private boolean questionAnswered = false;
     private Quiz quiz;
@@ -25,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.falseButton) RadioButton falseRadioButton;
     @BindView(R.id.next_button) Button nextButton;
     @BindView(R.id.radioGroup) RadioGroup radioGroup;
-    @BindView(R.id.answer_text) TextView answerTextView;
+
+    @BindView(R.id.imageQuestionResult) ImageView imageView;
+
     @BindView(R.id.question_text) TextView questionTextView;
 
     @OnClick(R.id.trueButton) void clickTrue() {
@@ -66,30 +73,27 @@ public class MainActivity extends AppCompatActivity {
             score = savedInstanceState.getInt(SCORE, -1);
         }
 
-        quiz = new QuizRepository(this).getQuiz();
-        showQuestion();
-
-        if (questionAnswered){
-            checkAnswer(userAnswer);
-        }
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(KEY_QUESTION_ID, -1);
+        new QuizRepository(this).getRemoteQuiz(id,this);
     }
 
     private void showQuestion(){
         Question question = quiz.getQuestions().get(currentQuestionIndex);
         questionTextView.setText(question.getStatement());
-        answerTextView.setText("");
+        imageView.setVisibility(View.INVISIBLE);
         nextButton.setEnabled(false);
     }
 
     private void checkAnswer(boolean answerToCheck){
         userAnswer = answerToCheck;
         Question question = quiz.getQuestions().get(currentQuestionIndex);
-
+        imageView.setVisibility(View.VISIBLE);
         if(answerToCheck == question.getAnswer()){
-            answerTextView.setText("YAYYYY!");
+            Glide.with(this).load("http://www.clipartbest.com/cliparts/RTA/Eoz/RTAEozeyc.png").into(imageView);
             if (!questionAnswered) score++;
         } else {
-            answerTextView.setText("Wrong answer.");
+            Glide.with(this).load("https://cdn1.iconfinder.com/data/icons/basic-ui-icon-rounded-colored/512/icon-02-512.png").into(imageView);
         }
         nextButton.setEnabled(true);
         trueRadioButton.setEnabled(false);
@@ -110,5 +114,30 @@ public class MainActivity extends AppCompatActivity {
         bundle.putBoolean(QUESTION_ANSWERED, questionAnswered);
         bundle.putInt(CURRENT_QUESTION_INDEX, currentQuestionIndex);
         bundle.putInt(SCORE, score);
+    }
+
+    @Override
+    public void onFailure() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "Unable to fetch quiz", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onSuccess(final Quiz quiz) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.this.quiz = quiz;
+                showQuestion();
+
+                if (questionAnswered){
+                    checkAnswer(userAnswer);
+                }
+            }
+        });
     }
 }
