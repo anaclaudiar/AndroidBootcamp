@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Le Quizzical</string>
-    <string name="hello_world">Salut Bootcamp</string>
+    <string name="true_string">vrai</string>
+    <string name="false_string">faux</string>
+    <string name="next">Prochaine</string>
+    <string name="result">Resultat:</string>
 </resources>

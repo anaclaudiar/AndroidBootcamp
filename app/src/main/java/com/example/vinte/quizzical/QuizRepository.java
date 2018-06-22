@@ -114,5 +114,4 @@ public class QuizRepository {
         void onFailure();
         void onSuccess(List<Quiz> quizes);
     }
-
 }

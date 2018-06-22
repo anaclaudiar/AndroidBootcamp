@@ -4,22 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/result_text"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/imageResult"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
-
-    <View
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
+    <include layout="@layout/result_common"/>
 
     <Button
         android:id="@+id/reset"
@@ -28,6 +13,5 @@
         android:textColor="@color/noColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
 </LinearLayout>

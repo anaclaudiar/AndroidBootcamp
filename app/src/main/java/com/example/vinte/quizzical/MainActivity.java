@@ -1,11 +1,14 @@
 package com.example.vinte.quizzical;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -30,10 +33,9 @@ public class MainActivity extends AppCompatActivity implements QuizRepository.Qu
     @BindView(R.id.falseButton) RadioButton falseRadioButton;
     @BindView(R.id.next_button) Button nextButton;
     @BindView(R.id.radioGroup) RadioGroup radioGroup;
-
     @BindView(R.id.imageQuestionResult) ImageView imageView;
-
     @BindView(R.id.question_text) TextView questionTextView;
+    @BindView(R.id.determinateBar) ProgressBar progressBar;
 
     @OnClick(R.id.trueButton) void clickTrue() {
         checkAnswer(true);
@@ -99,8 +101,11 @@ public class MainActivity extends AppCompatActivity implements QuizRepository.Qu
         trueRadioButton.setEnabled(false);
         falseRadioButton.setEnabled(false);
         questionAnswered = true;
-    }
 
+        progressBar.getProgressDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+
+        progressBar.setProgress( (int)(((double)(currentQuestionIndex + 1) / (float) quiz.getQuestions().size())*100) );
+    }
 
     private static final String USER_ANSWER = "user answer";
     private static final String QUESTION_ANSWERED = "question answered";

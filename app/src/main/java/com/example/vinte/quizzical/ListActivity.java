@@ -37,11 +37,8 @@ public class ListActivity extends AppCompatActivity implements QuizRepository.Qu
                 Intent intent = new Intent(ListActivity.this, MainActivity.class);
                 intent.putExtra(MainActivity.KEY_QUESTION_ID, quiz.getId());
                 startActivity(intent);
-
             }
         });
-
-
     }
 
     @Override
@@ -87,5 +84,4 @@ public class ListActivity extends AppCompatActivity implements QuizRepository.Qu
             return textView;
         }
     }
-
 }

@@ -20,6 +20,8 @@ public class ResultActivity extends AppCompatActivity{
     public static final String KEY_TOTAL_QUESTIONS = "total";
 
     @BindView(R.id.reset) Button resetButton;
+    @BindView(R.id.imageResult) ImageView imageView;
+    @BindView(R.id.result_text) TextView resultText;
 
     @OnClick(R.id.reset) void clickReset() {
         Intent intent = new Intent(ResultActivity.this, ListActivity.class);
@@ -27,32 +29,30 @@ public class ResultActivity extends AppCompatActivity{
         finish();
     }
 
-    private TextView resultText;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_layout);
         ButterKnife.bind(this);
 
-        resultText = findViewById(R.id.result_text);
-
         Intent intent = getIntent();
         int score = intent.getIntExtra(KEY_SCORE, -1);
         int totalQuestions = intent.getIntExtra(KEY_TOTAL_QUESTIONS, -1);
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageResult);
+        SetFinalImage(score, totalQuestions);
 
+        String result = String.format("%d", (int)(((double)score/(double)totalQuestions)*100)) + "%";
+        resultText.setText(getString(R.string.result) + result);
+    }
+
+    private void SetFinalImage(int score, int totalQuestions) {
         if (score >= totalQuestions) {
-            Glide.with(this).load("https://media.giphy.com/media/dkGhBWE3SyzXW/giphy.gif").into(imageView);
+            Glide.with(this).load("https://media.giphy.com/media/RrVzUOXldFe8M/giphy.gif").into(imageView);
         } else if (score > 0) {
             Glide.with(this).load("https://media.giphy.com/media/RN9wo1TPU0e0wm4a7l/giphy.gif").into(imageView);
         } else {
             Glide.with(this).load("https://media.giphy.com/media/gGxSl050qQOJi/giphy.gif").into(imageView);
         }
-
-        String result = String.format("%d", (int)(((double)score/(double)totalQuestions)*100)) + "%";
-        resultText.setText("Result: " + result);
     }
 
 }
